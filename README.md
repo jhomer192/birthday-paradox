@@ -1,6 +1,6 @@
 # Birthday Paradox Simulator
 
-An interactive, portfolio-grade visualisation of the classic Birthday Paradox. It plots the theoretical probability curve alongside a **live Monte Carlo simulator** that you can run right in the browser — with up to 100,000 trials — and see the empirical estimate converge on the maths.
+An interactive, portfolio-grade visualisation of the classic Birthday Paradox. It plots the theoretical probability curve alongside a **live Monte Carlo simulator** that you can run right in the browser — with up to 100,000 trials — and watch the empirical estimate converge on the maths.
 
 **Live demo:** https://jhomer192.github.io/birthday-paradox/
 
@@ -23,14 +23,26 @@ An interactive, portfolio-grade visualisation of the classic Birthday Paradox. I
 
 ```bash
 npm install
-npm run dev        # Vite dev server
+npm run dev        # Vite dev server (http://localhost:5173/birthday-paradox/)
 npm run build      # Typecheck + production build into dist/
-npm run preview    # Serve the built bundle
+npm run preview    # Serve the built bundle locally
 ```
 
-## Deploy
+## Deployment
 
-Pushes to `main` trigger `.github/workflows/deploy.yml`, which builds the app and publishes `dist/` via `actions/deploy-pages@v4`. The repo's Pages source must be set to "GitHub Actions".
+The site is published to GitHub Pages from the `gh-pages` branch (Pages source: **Deploy from a branch**, branch `gh-pages`, folder `/`).
+
+### One-command deploy
+
+```bash
+bash scripts/deploy.sh
+```
+
+This builds `dist/` and pushes it to the `gh-pages` branch via a temporary git worktree.
+
+### GitHub Actions (optional)
+
+An Actions workflow is provided at [`scripts/pages-workflow.yml`](scripts/pages-workflow.yml). To switch to Actions-based deploys, copy it to `.github/workflows/deploy.yml` and change the Pages source to **GitHub Actions** in repo settings. (It wasn't checked into `.github/workflows/` directly because the ambient `gh` token used to bootstrap the repo lacked the `workflow` OAuth scope.)
 
 ---
 
