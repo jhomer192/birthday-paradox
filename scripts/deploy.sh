@@ -26,7 +26,8 @@ git worktree add -B gh-pages "$WORKTREE_DIR" --no-checkout
     exit 0
   fi
   git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-  git push -u origin gh-pages
+  # gh-pages is a build-output branch; force-push so local worktree wins.
+  git push -u --force origin gh-pages
 )
 
 echo "→ Done. Live at https://jhomer192.github.io/birthday-paradox/"
