@@ -10,7 +10,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { sampleOneGroup, simulateChunk, theoreticalCurve, theoreticalProbability } from './math';
+import {
+  formatBirthday,
+  samplePeople,
+  simulateChunk,
+  theoreticalCurve,
+  theoreticalProbability,
+  type NamedSample,
+  type Person,
+} from './math';
 
 const TRIAL_OPTIONS = [100, 1_000, 10_000, 100_000] as const;
 type TrialCount = (typeof TRIAL_OPTIONS)[number];
@@ -57,10 +65,14 @@ export default function App() {
   const curveData = useMemo(() => theoreticalCurve(100), []);
   const theoretical = useMemo(() => theoreticalProbability(groupSize), [groupSize]);
 
-  const [sample, setSample] = useState(() => sampleOneGroup(23));
-  useEffect(() => {
-    setSample(sampleOneGroup(groupSize));
-  }, [groupSize]);
+  const [sampleSeed, setSampleSeed] = useState<number>(() => (Math.random() * 2 ** 31) | 0);
+  const sample = useMemo<NamedSample>(
+    () => samplePeople(groupSize, sampleSeed),
+    [groupSize, sampleSeed],
+  );
+  const regenerateSample = useCallback(() => {
+    setSampleSeed((Math.random() * 2 ** 31) | 0);
+  }, []);
 
   const runSimulation = useCallback(() => {
     if (running) return;
@@ -281,7 +293,7 @@ export default function App() {
                 {running ? 'Cancel' : 'Run simulation'}
               </button>
               <button
-                onClick={() => setSample(sampleOneGroup(groupSize))}
+                onClick={regenerateSample}
                 disabled={running}
                 className="px-3 py-2 rounded-md text-sm font-medium border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 hover:border-indigo-400 dark:hover:border-indigo-500 text-slate-600 dark:text-slate-300 disabled:opacity-50"
               >
@@ -324,22 +336,12 @@ export default function App() {
             )}
           </Card>
 
-          <Card className="lg:col-span-2">
-            <CardHeader
-              title="One random sample"
-              subtitle={`${groupSize} birthdays placed on the calendar. Days with a collision glow red.`}
-            />
-            <CalendarGrid sample={sample} />
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-              <span>
-                Collisions:{' '}
-                <span className="font-semibold text-rose-500">
-                  {sample.collisionDays.size > 0 ? `${sample.collisionDays.size} day(s)` : 'none'}
-                </span>
-              </span>
-              <span>{sample.birthdays.length} draws</span>
-            </div>
-          </Card>
+          <PeopleGridCard
+            sample={sample}
+            groupSize={groupSize}
+            onRegenerate={regenerateSample}
+            disabled={running}
+          />
         </section>
 
         <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -516,37 +518,194 @@ function Explainer({ title, body }: { title: string; body: string }) {
   );
 }
 
-function CalendarGrid({
+/* ---------- Named-people sample viewer ---------- */
+
+type SortMode = 'name' | 'birthday' | 'group';
+
+// Tailwind palette, paired for light + dark themes. Index 0 is reserved as
+// "neutral" (unique birthday). Indices 1..N cycle through distinctive colors.
+const GROUP_PALETTE: { bg: string; text: string; border: string; dot: string }[] = [
+  {
+    // 0 — neutral, unique birthday
+    bg: 'bg-slate-50 dark:bg-slate-900/40',
+    text: 'text-slate-700 dark:text-slate-200',
+    border: 'border-slate-200 dark:border-slate-800',
+    dot: 'bg-slate-300 dark:bg-slate-700',
+  },
+  { bg: 'bg-rose-100 dark:bg-rose-900/40',     text: 'text-rose-800 dark:text-rose-300',     border: 'border-rose-300 dark:border-rose-700',     dot: 'bg-rose-500' },
+  { bg: 'bg-amber-100 dark:bg-amber-900/40',   text: 'text-amber-800 dark:text-amber-300',   border: 'border-amber-300 dark:border-amber-700',   dot: 'bg-amber-500' },
+  { bg: 'bg-emerald-100 dark:bg-emerald-900/40', text: 'text-emerald-800 dark:text-emerald-300', border: 'border-emerald-300 dark:border-emerald-700', dot: 'bg-emerald-500' },
+  { bg: 'bg-sky-100 dark:bg-sky-900/40',       text: 'text-sky-800 dark:text-sky-300',       border: 'border-sky-300 dark:border-sky-700',       dot: 'bg-sky-500' },
+  { bg: 'bg-violet-100 dark:bg-violet-900/40', text: 'text-violet-800 dark:text-violet-300', border: 'border-violet-300 dark:border-violet-700', dot: 'bg-violet-500' },
+  { bg: 'bg-fuchsia-100 dark:bg-fuchsia-900/40', text: 'text-fuchsia-800 dark:text-fuchsia-300', border: 'border-fuchsia-300 dark:border-fuchsia-700', dot: 'bg-fuchsia-500' },
+  { bg: 'bg-cyan-100 dark:bg-cyan-900/40',     text: 'text-cyan-800 dark:text-cyan-300',     border: 'border-cyan-300 dark:border-cyan-700',     dot: 'bg-cyan-500' },
+  { bg: 'bg-lime-100 dark:bg-lime-900/40',     text: 'text-lime-800 dark:text-lime-300',     border: 'border-lime-300 dark:border-lime-700',     dot: 'bg-lime-500' },
+  { bg: 'bg-orange-100 dark:bg-orange-900/40', text: 'text-orange-800 dark:text-orange-300', border: 'border-orange-300 dark:border-orange-700', dot: 'bg-orange-500' },
+  { bg: 'bg-teal-100 dark:bg-teal-900/40',     text: 'text-teal-800 dark:text-teal-300',     border: 'border-teal-300 dark:border-teal-700',     dot: 'bg-teal-500' },
+];
+
+function paletteForGroup(groupId: number) {
+  if (groupId <= 0) return GROUP_PALETTE[0];
+  // Recycle from indices 1..N.
+  const idx = ((groupId - 1) % (GROUP_PALETTE.length - 1)) + 1;
+  return GROUP_PALETTE[idx];
+}
+
+function PeopleGridCard({
   sample,
+  groupSize,
+  onRegenerate,
+  disabled,
 }: {
-  sample: { birthdays: number[]; collisionDays: Set<number> };
+  sample: NamedSample;
+  groupSize: number;
+  onRegenerate: () => void;
+  disabled: boolean;
 }) {
-  // 365 cells in a compact grid; color = count at that day.
-  const counts = useMemo(() => {
-    const c = new Uint16Array(365);
-    for (const b of sample.birthdays) c[b]++;
-    return c;
-  }, [sample]);
+  const [sortMode, setSortMode] = useState<SortMode>('group');
+  const [query, setQuery] = useState('');
+
+  const visiblePeople = useMemo<Person[]>(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = q
+      ? sample.people.filter((p) => p.name.toLowerCase().includes(q))
+      : sample.people.slice();
+    switch (sortMode) {
+      case 'name':
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'birthday':
+        filtered.sort((a, b) => a.day - b.day || a.name.localeCompare(b.name));
+        break;
+      case 'group':
+        filtered.sort((a, b) => {
+          // Collision groups first (group id > 0), sorted by group id, then
+          // by day (so members of the same group are adjacent), then name.
+          const ag = a.groupId === 0 ? Number.POSITIVE_INFINITY : a.groupId;
+          const bg = b.groupId === 0 ? Number.POSITIVE_INFINITY : b.groupId;
+          if (ag !== bg) return ag - bg;
+          if (a.day !== b.day) return a.day - b.day;
+          return a.name.localeCompare(b.name);
+        });
+        break;
+    }
+    return filtered;
+  }, [sample, sortMode, query]);
+
+  const { collisionGroupCount, peopleInCollisions } = sample;
 
   return (
-    <div
-      className="mt-3 grid gap-[2px]"
-      style={{ gridTemplateColumns: 'repeat(30, minmax(0, 1fr))' }}
-    >
-      {Array.from({ length: 365 }, (_, d) => {
-        const n = counts[d];
-        const collision = sample.collisionDays.has(d);
-        let cls = 'bg-slate-200/70 dark:bg-slate-800/70';
-        if (n === 1) cls = 'bg-indigo-400/70 dark:bg-indigo-500/70';
-        if (collision) cls = 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.75)]';
-        return (
-          <div
-            key={d}
-            title={n > 0 ? `Day ${d + 1}: ${n} person${n > 1 ? 's' : ''}` : `Day ${d + 1}`}
-            className={`aspect-square rounded-[2px] ${cls} transition-colors`}
-          />
-        );
-      })}
-    </div>
+    <Card className="lg:col-span-2">
+      <CardHeader
+        title="Sample group viewer"
+        subtitle={`${groupSize} fake people with random birthdays. Matching birthdays share a color.`}
+      />
+
+      {/* Collision summary */}
+      <div className="mt-3">
+        {collisionGroupCount === 0 ? (
+          <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 px-3 py-2 text-sm text-slate-600 dark:text-slate-300">
+            No collisions in this sample.
+          </div>
+        ) : (
+          <div className="rounded-lg border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-900/30 px-3 py-2 text-sm text-rose-800 dark:text-rose-200">
+            <span className="font-semibold">
+              {collisionGroupCount} shared birthday{collisionGroupCount === 1 ? '' : 's'}
+            </span>{' '}
+            in this group ({peopleInCollisions} of {groupSize} people involved).
+          </div>
+        )}
+      </div>
+
+      {/* Controls: sort + search + regenerate */}
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="inline-flex rounded-md border border-slate-200 dark:border-slate-700 bg-white/60 dark:bg-slate-800/60 overflow-hidden">
+          {(['group', 'name', 'birthday'] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setSortMode(m)}
+              className={`px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                sortMode === m
+                  ? 'bg-indigo-500 text-white'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60'
+              }`}
+              aria-pressed={sortMode === m}
+              title={
+                m === 'group'
+                  ? 'Sort by collision group'
+                  : m === 'name'
+                    ? 'Sort by name (A→Z)'
+                    : 'Sort by birthday (Jan 1 → Dec 31)'
+              }
+            >
+              {m === 'group' ? 'Group' : m === 'name' ? 'Name' : 'Birthday'}
+            </button>
+          ))}
+        </div>
+
+        <input
+          type="search"
+          placeholder="Search name…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="flex-1 min-w-[8rem] px-2.5 py-1.5 rounded-md text-xs border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+        />
+
+        <button
+          type="button"
+          onClick={onRegenerate}
+          disabled={disabled}
+          className="px-2.5 py-1.5 rounded-md text-xs font-semibold border border-indigo-500/50 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Re-roll a new random group of the same size"
+        >
+          Regenerate sample
+        </button>
+      </div>
+
+      {/* Grid */}
+      {visiblePeople.length === 0 ? (
+        <div className="mt-4 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+          No people match “{query}”.
+        </div>
+      ) : (
+        <div className="mt-3 grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+          {visiblePeople.map((p) => {
+            const pal = paletteForGroup(p.groupId);
+            return (
+              <div
+                key={p.id}
+                className={`relative rounded-lg border ${pal.border} ${pal.bg} px-2.5 py-2 transition-colors`}
+              >
+                <div className={`text-[11px] font-semibold truncate ${pal.text}`} title={p.name}>
+                  {p.name}
+                </div>
+                <div className="mt-0.5 flex items-center justify-between gap-1">
+                  <div className="text-[10px] tabular-nums text-slate-500 dark:text-slate-400">
+                    {formatBirthday(p.day)}
+                  </div>
+                  {p.groupId > 0 && (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${pal.text}`}
+                      title={`Collision group ${p.groupId}`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${pal.dot}`} />G{p.groupId}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Footer count */}
+      <div className="mt-3 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+        <span>
+          Showing <span className="font-semibold">{visiblePeople.length}</span> of {groupSize} people
+        </span>
+        <span className="tabular-nums">seed #{sample.seed}</span>
+      </div>
+    </Card>
   );
 }
