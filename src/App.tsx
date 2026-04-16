@@ -562,12 +562,32 @@ function PeopleGridCard({
 }) {
   const [sortMode, setSortMode] = useState<SortMode>('group');
   const [query, setQuery] = useState('');
+  const [groupFilter, setGroupFilter] = useState<string>('all');
+
+  const availableGroupIds = useMemo<number[]>(() => {
+    const ids = new Set<number>();
+    for (const p of sample.people) if (p.groupId > 0) ids.add(p.groupId);
+    return [...ids].sort((a, b) => a - b);
+  }, [sample]);
+
+  // Reset filter if the selected group no longer exists in a regenerated sample.
+  useEffect(() => {
+    if (groupFilter === 'all' || groupFilter === 'any') return;
+    const n = Number(groupFilter);
+    if (!availableGroupIds.includes(n)) setGroupFilter('all');
+  }, [availableGroupIds, groupFilter]);
 
   const visiblePeople = useMemo<Person[]>(() => {
     const q = query.trim().toLowerCase();
-    const filtered = q
+    let filtered = q
       ? sample.people.filter((p) => p.name.toLowerCase().includes(q))
       : sample.people.slice();
+    if (groupFilter === 'any') {
+      filtered = filtered.filter((p) => p.groupId > 0);
+    } else if (groupFilter !== 'all') {
+      const target = Number(groupFilter);
+      filtered = filtered.filter((p) => p.groupId === target);
+    }
     switch (sortMode) {
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -588,7 +608,7 @@ function PeopleGridCard({
         break;
     }
     return filtered;
-  }, [sample, sortMode, query]);
+  }, [sample, sortMode, query, groupFilter]);
 
   const { collisionGroupCount, peopleInCollisions } = sample;
 
@@ -642,6 +662,23 @@ function PeopleGridCard({
           ))}
         </div>
 
+        <select
+          value={groupFilter}
+          onChange={(e) => setGroupFilter(e.target.value)}
+          className="px-2 py-1.5 rounded-md text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+          title="Filter by collision group"
+        >
+          <option value="all">All people</option>
+          <option value="any" disabled={availableGroupIds.length === 0}>
+            In any group {availableGroupIds.length === 0 ? '(none)' : ''}
+          </option>
+          {availableGroupIds.map((id) => (
+            <option key={id} value={String(id)}>
+              Only G{id}
+            </option>
+          ))}
+        </select>
+
         <input
           type="search"
           placeholder="Search name…"
@@ -664,7 +701,7 @@ function PeopleGridCard({
       {/* Grid */}
       {visiblePeople.length === 0 ? (
         <div className="mt-4 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
-          No people match “{query}”.
+          No people match the current filters.
         </div>
       ) : (
         <div className="mt-3 grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
