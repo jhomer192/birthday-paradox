@@ -235,8 +235,8 @@ export default function App() {
           </Card>
         </section>
 
-        <section className="mt-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <Card className="lg:col-span-3">
+        <section className="mt-6">
+          <Card>
             <CardHeader
               title="Monte Carlo simulator"
               subtitle="Draw random birthdays and count how often a group collides. The empirical estimate should converge to the theoretical value."
@@ -335,16 +335,9 @@ export default function App() {
               </div>
             )}
           </Card>
-
-          <PeopleGridCard
-            sample={sample}
-            groupSize={groupSize}
-            onRegenerate={regenerateSample}
-            disabled={running}
-          />
         </section>
 
-        <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <section className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           <Explainer
             title="Why is it surprising?"
             body="Intuition says 23 people is far from 365 days, so collisions should be rare. But with 23 people there are C(23,2) = 253 pairs — each a chance at a match."
@@ -353,9 +346,14 @@ export default function App() {
             title="The formula"
             body="P(N) = 1 − (365 · 364 · … · (365−N+1)) / 365^N. It's the probability that all N birthdays are distinct, subtracted from 1."
           />
-          <Explainer
-            title="About this app"
-            body="Built with React, TypeScript, Tailwind and Recharts. Simulations run on the main thread in ~16 ms chunks so the UI stays buttery smooth."
+        </section>
+
+        <section className="mt-8">
+          <PeopleGridCard
+            sample={sample}
+            groupSize={groupSize}
+            onRegenerate={regenerateSample}
+            disabled={running}
           />
         </section>
 
