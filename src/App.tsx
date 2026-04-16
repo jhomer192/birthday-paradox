@@ -358,14 +358,7 @@ export default function App() {
         </section>
 
         <footer className="mt-12 text-center text-xs text-slate-500 dark:text-slate-400">
-          Built by{' '}
-          <a
-            href="https://github.com/jhomer192"
-            className="font-semibold text-indigo-500 hover:text-indigo-400"
-          >
-            Jack Homer
-          </a>{' '}
-          · assumes 365 uniform days (ignores Feb 29 and seasonal birth clustering).
+          Built by Jack Homer · assumes 365 uniform days (ignores Feb 29 and seasonal birth clustering).
         </footer>
       </div>
     </div>
