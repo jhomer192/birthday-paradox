@@ -637,7 +637,13 @@ function PeopleGridCard({
     <Card className="lg:col-span-2">
       <CardHeader
         title="Sample group viewer"
-        subtitle={`${groupSize} fake people with random birthdays. Matching birthdays share a color.`}
+        subtitle={
+          sortMode === 'birthday'
+            ? `${groupSize} people sorted by birthday (Jan 1 to Dec 31). Matching birthdays share a color.`
+            : sortMode === 'name'
+              ? `${groupSize} people sorted alphabetically by name. Matching birthdays share a color.`
+              : `${groupSize} fake people with random birthdays. Matching birthdays share a color.`
+        }
       />
 
       {/* Collision summary */}
