@@ -1,15 +1,23 @@
+@import './themes.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 html,
 body,
 #root {
   height: 100%;
+}
+
+html,
+body {
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 body {
@@ -22,7 +30,8 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  background-color: var(--surface-alt);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

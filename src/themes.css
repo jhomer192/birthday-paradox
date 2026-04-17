@@ -1,0 +1,55 @@
+/* ─── Theme definitions via CSS custom properties ─── */
+
+/* Mocha (default) */
+:root,
+[data-theme="mocha"] {
+  --bg:           #1e1e2e;
+  --bg-alt:       #181825;
+  --surface:      #313244;
+  --surface-alt:  #45475a;
+  --border:       #45475a;
+  --text:         #cdd6f4;
+  --text-muted:   #a6adc8;
+  --accent:       #cba6f7;
+  --accent-2:     #f38ba8;
+  --accent-3:     #a6e3a1;
+}
+
+[data-theme="tokyo-night"] {
+  --bg:           #1a1b26;
+  --bg-alt:       #16161e;
+  --surface:      #24283b;
+  --surface-alt:  #2f3549;
+  --border:       #2f3549;
+  --text:         #c0caf5;
+  --text-muted:   #737aa2;
+  --accent:       #7aa2f7;
+  --accent-2:     #f7768e;
+  --accent-3:     #9ece6a;
+}
+
+[data-theme="dracula"] {
+  --bg:           #282a36;
+  --bg-alt:       #21222c;
+  --surface:      #44475a;
+  --surface-alt:  #6272a4;
+  --border:       #6272a4;
+  --text:         #f8f8f2;
+  --text-muted:   #6272a4;
+  --accent:       #bd93f9;
+  --accent-2:     #ff79c6;
+  --accent-3:     #50fa7b;
+}
+
+[data-theme="nord"] {
+  --bg:           #2e3440;
+  --bg-alt:       #242933;
+  --surface:      #3b4252;
+  --surface-alt:  #434c5e;
+  --border:       #4c566a;
+  --text:         #eceff4;
+  --text-muted:   #d8dee9;
+  --accent:       #88c0d0;
+  --accent-2:     #bf616a;
+  --accent-3:     #a3be8c;
+}
