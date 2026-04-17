@@ -25,20 +25,20 @@ type TrialCount = (typeof TRIAL_OPTIONS)[number];
 
 /* ─── Theme ─── */
 
-type ThemeName = 'mocha' | 'tokyo-night' | 'dracula' | 'nord';
+type ThemeName = 'mocha' | 'tokyo-night' | 'miami' | 'forest';
 
 const THEMES: { id: ThemeName; label: string; dot: string }[] = [
-  { id: 'mocha',       label: 'Mocha',       dot: '#cba6f7' },
-  { id: 'tokyo-night', label: 'Tokyo Night', dot: '#7aa2f7' },
-  { id: 'dracula',     label: 'Dracula',     dot: '#bd93f9' },
-  { id: 'nord',        label: 'Nord',        dot: '#88c0d0' },
+  { id: 'mocha',       label: 'Mocha',       dot: '#f5c2e7' },
+  { id: 'tokyo-night', label: 'Tokyo Night', dot: '#73daca' },
+  { id: 'miami',       label: 'Miami',       dot: '#ff2d95' },
+  { id: 'forest',      label: 'Forest',      dot: '#8fbc6a' },
 ];
 
 function useTheme(): [ThemeName, (t: ThemeName) => void] {
   const [theme, setThemeState] = useState<ThemeName>(() => {
     if (typeof window === 'undefined') return 'mocha';
     const saved = localStorage.getItem('site-theme') as ThemeName | null;
-    const valid: ThemeName[] = ['mocha', 'tokyo-night', 'dracula', 'nord'];
+    const valid: ThemeName[] = ['mocha', 'tokyo-night', 'miami', 'forest'];
     return valid.includes(saved as ThemeName) ? (saved as ThemeName) : 'mocha';
   });
 

@@ -28,28 +28,28 @@
   --accent-3:     #bb9af7;
 }
 
-[data-theme="dracula"] {
-  --bg:           #282a36;
-  --bg-alt:       #21222c;
-  --surface:      #44475a;
-  --surface-alt:  #4f5273;
-  --border:       #6272a4;
-  --text:         #f8f8f2;
-  --text-muted:   #c3c3c6;
-  --accent:       #ff79c6;
-  --accent-2:     #bd93f9;
-  --accent-3:     #8be9fd;
+[data-theme="miami"] {
+  --bg:           #0d0221;
+  --bg-alt:       #07010f;
+  --surface:      #1a0a3e;
+  --surface-alt:  #2d1b69;
+  --border:       #3d2b7a;
+  --text:         #f0e6ff;
+  --text-muted:   #c4b5d9;
+  --accent:       #ff2d95;
+  --accent-2:     #00f0ff;
+  --accent-3:     #f7ff00;
 }
 
-[data-theme="nord"] {
-  --bg:           #2e3440;
-  --bg-alt:       #242933;
-  --surface:      #3b4252;
-  --surface-alt:  #434c5e;
-  --border:       #4c566a;
-  --text:         #eceff4;
-  --text-muted:   #d8dee9;
-  --accent:       #a3be8c;
-  --accent-2:     #88c0d0;
-  --accent-3:     #b48ead;
+[data-theme="forest"] {
+  --bg:           #1a2118;
+  --bg-alt:       #111710;
+  --surface:      #243024;
+  --surface-alt:  #2e3e2e;
+  --border:       #3a4d3a;
+  --text:         #d4dcd0;
+  --text-muted:   #a8b5a2;
+  --accent:       #8fbc6a;
+  --accent-2:     #c9a96e;
+  --accent-3:     #6bb5a0;
 }
