@@ -8,9 +8,9 @@
     <title>Birthday Paradox Simulator</title>
     <script>
       (function () {
+        var old = ['mocha', 'tokyo-night', 'dracula', 'nord', 'forest'];
         var t = localStorage.getItem('site-theme');
-        var valid = ['mocha', 'tokyo-night', 'dracula', 'nord'];
-        document.documentElement.setAttribute('data-theme', valid.includes(t) ? t : 'mocha');
+        document.documentElement.setAttribute('data-theme', (t && old.indexOf(t) === -1) ? t : 'tokyo');
       })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

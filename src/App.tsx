@@ -25,21 +25,20 @@ type TrialCount = (typeof TRIAL_OPTIONS)[number];
 
 /* ─── Theme ─── */
 
-type ThemeName = 'mocha' | 'tokyo-night' | 'miami' | 'forest';
+type ThemeName = 'tokyo' | 'miami' | 'matcha';
 
 const THEMES: { id: ThemeName; label: string; dot: string }[] = [
-  { id: 'mocha',       label: 'Mocha',       dot: '#f5c2e7' },
-  { id: 'tokyo-night', label: 'Tokyo Night', dot: '#73daca' },
-  { id: 'miami',       label: 'Miami',       dot: '#ff2d95' },
-  { id: 'forest',      label: 'Forest',      dot: '#8fbc6a' },
+  { id: 'tokyo',  label: 'Tokyo Night', dot: '#73daca' },
+  { id: 'miami',  label: 'Miami',       dot: '#ff2d95' },
+  { id: 'matcha', label: 'Matcha',      dot: '#8db660' },
 ];
 
 function useTheme(): [ThemeName, (t: ThemeName) => void] {
   const [theme, setThemeState] = useState<ThemeName>(() => {
-    if (typeof window === 'undefined') return 'mocha';
+    if (typeof window === 'undefined') return 'tokyo';
     const saved = localStorage.getItem('site-theme') as ThemeName | null;
-    const valid: ThemeName[] = ['mocha', 'tokyo-night', 'miami', 'forest'];
-    return valid.includes(saved as ThemeName) ? (saved as ThemeName) : 'mocha';
+    const valid: ThemeName[] = ['tokyo', 'miami', 'matcha'];
+    return valid.includes(saved as ThemeName) ? (saved as ThemeName) : 'tokyo';
   });
 
   const setTheme = useCallback((t: ThemeName) => {

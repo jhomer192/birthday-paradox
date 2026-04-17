@@ -1,21 +1,8 @@
-/* ─── Theme definitions via CSS custom properties ─── */
+/* Theme definitions via CSS custom properties */
 
-/* Mocha (default) */
+/* Tokyo Night (default) */
 :root,
-[data-theme="mocha"] {
-  --bg:           #1e1e2e;
-  --bg-alt:       #181825;
-  --surface:      #313244;
-  --surface-alt:  #45475a;
-  --border:       #45475a;
-  --text:         #cdd6f4;
-  --text-muted:   #a6adc8;
-  --accent:       #f5c2e7;
-  --accent-2:     #cba6f7;
-  --accent-3:     #89b4fa;
-}
-
-[data-theme="tokyo-night"] {
+[data-theme="tokyo"] {
   --bg:           #16161e;
   --bg-alt:       #13131a;
   --surface:      #1a1b26;
@@ -41,15 +28,15 @@
   --accent-3:     #f7ff00;
 }
 
-[data-theme="forest"] {
-  --bg:           #1a2118;
-  --bg-alt:       #111710;
-  --surface:      #243024;
-  --surface-alt:  #2e3e2e;
-  --border:       #3a4d3a;
-  --text:         #d4dcd0;
-  --text-muted:   #a8b5a2;
-  --accent:       #8fbc6a;
-  --accent-2:     #c9a96e;
-  --accent-3:     #6bb5a0;
+[data-theme="matcha"] {
+  --bg:           #1c1a17;
+  --bg-alt:       #131210;
+  --surface:      #2a2722;
+  --surface-alt:  #363229;
+  --border:       #4a4438;
+  --text:         #e8e0d0;
+  --text-muted:   #bfb8a8;
+  --accent:       #8db660;
+  --accent-2:     #d4a852;
+  --accent-3:     #c17f59;
 }
