@@ -25,19 +25,20 @@ type TrialCount = (typeof TRIAL_OPTIONS)[number];
 
 /* ─── Theme ─── */
 
-type ThemeName = 'tokyo' | 'miami' | 'matcha';
+type ThemeName = 'tokyo' | 'miami' | 'matcha' | 'gruvbox';
 
 const THEMES: { id: ThemeName; label: string; dot: string }[] = [
-  { id: 'tokyo',  label: 'Tokyo Night', dot: '#73daca' },
-  { id: 'miami',  label: 'Miami',       dot: '#ff2d95' },
-  { id: 'matcha', label: 'Matcha',      dot: '#8db660' },
+  { id: 'tokyo',   label: 'Tokyo Night', dot: '#73daca' },
+  { id: 'miami',   label: 'Miami',       dot: '#ff2d95' },
+  { id: 'matcha',  label: 'Matcha',      dot: '#8db660' },
+  { id: 'gruvbox', label: 'Gruvbox',     dot: '#fb4934' },
 ];
 
 function useTheme(): [ThemeName, (t: ThemeName) => void] {
   const [theme, setThemeState] = useState<ThemeName>(() => {
     if (typeof window === 'undefined') return 'tokyo';
     const saved = localStorage.getItem('site-theme') as ThemeName | null;
-    const valid: ThemeName[] = ['tokyo', 'miami', 'matcha'];
+    const valid: ThemeName[] = ['tokyo', 'miami', 'matcha', 'gruvbox'];
     return valid.includes(saved as ThemeName) ? (saved as ThemeName) : 'tokyo';
   });
 
