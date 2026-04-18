@@ -30,7 +30,7 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--surface-alt);
+  background-color: var(--border);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-track {

@@ -1,55 +1,46 @@
-/* Theme definitions via CSS custom properties */
+/* Theme system -- CSS custom properties */
 
-/* Tokyo Night (default) */
-:root,
-[data-theme="tokyo"] {
-  --bg:           #16161e;
-  --bg-alt:       #13131a;
-  --surface:      #1a1b26;
-  --surface-alt:  #292e42;
-  --border:       #3b4261;
-  --text:         #c0caf5;
-  --text-muted:   #a9b1d6;
-  --accent:       #73daca;
-  --accent-2:     #7aa2f7;
-  --accent-3:     #bb9af7;
+html,
+html[data-theme='tokyo'] {
+  --bg: #16161e;
+  --surface: #1a1b26;
+  --text: #a9b1d6;
+  --text-dim: #565f89;
+  --accent: #73daca;
+  --accent-2: #7aa2f7;
+  --accent-3: #bb9af7;
+  --border: #292e42;
 }
 
-[data-theme="miami"] {
-  --bg:           #0d0221;
-  --bg-alt:       #07010f;
-  --surface:      #1a0a3e;
-  --surface-alt:  #2d1b69;
-  --border:       #3d2b7a;
-  --text:         #f0e6ff;
-  --text-muted:   #c4b5d9;
-  --accent:       #ff2d95;
-  --accent-2:     #00f0ff;
-  --accent-3:     #f7ff00;
+html[data-theme='miami'] {
+  --bg: #0d0221;
+  --surface: #150535;
+  --text: #e0def4;
+  --text-dim: #908caa;
+  --accent: #ff2d95;
+  --accent-2: #00f0ff;
+  --accent-3: #ffe156;
+  --border: #2a1a4e;
 }
 
-[data-theme="matcha"] {
-  --bg:           #1c1a17;
-  --bg-alt:       #131210;
-  --surface:      #2a2722;
-  --surface-alt:  #363229;
-  --border:       #4a4438;
-  --text:         #e8e0d0;
-  --text-muted:   #bfb8a8;
-  --accent:       #8db660;
-  --accent-2:     #d4a852;
-  --accent-3:     #c17f59;
+html[data-theme='matcha'] {
+  --bg: #1c1a17;
+  --surface: #252320;
+  --text: #d4be98;
+  --text-dim: #7c6f64;
+  --accent: #8db660;
+  --accent-2: #d4be98;
+  --accent-3: #a9b665;
+  --border: #3c3836;
 }
 
-[data-theme="gruvbox"] {
-  --bg:           #282828;
-  --bg-alt:       #1d2021;
-  --surface:      #3c3836;
-  --surface-alt:  #504945;
-  --border:       #504945;
-  --text:         #ebdbb2;
-  --text-muted:   #d5c4a1;
-  --accent:       #fb4934;
-  --accent-2:     #fe8019;
-  --accent-3:     #fabd2f;
+html[data-theme='gruvbox'] {
+  --bg: #282828;
+  --surface: #3c3836;
+  --text: #ebdbb2;
+  --text-dim: #928374;
+  --accent: #fb4934;
+  --accent-2: #fabd2f;
+  --accent-3: #b8bb26;
+  --border: #504945;
 }

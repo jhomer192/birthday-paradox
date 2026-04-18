@@ -18,12 +18,12 @@ export default {
       colors: {
         theme: {
           bg:            'var(--bg)',
-          'bg-alt':      'var(--bg-alt)',
+          'bg-alt':      'var(--bg)',
           surface:       'var(--surface)',
-          'surface-alt': 'var(--surface-alt)',
+          'surface-alt': 'var(--border)',
           border:        'var(--border)',
           text:          'var(--text)',
-          muted:         'var(--text-muted)',
+          muted:         'var(--text-dim)',
           accent:        'var(--accent)',
           accent2:       'var(--accent-2)',
           accent3:       'var(--accent-3)',

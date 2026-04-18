@@ -180,7 +180,7 @@ export default function App() {
                   />
                   <Tooltip
                     contentStyle={{
-                      background: 'var(--bg-alt)',
+                      background: 'var(--bg)',
                       border: '1px solid var(--border)',
                       borderRadius: 8,
                       fontSize: 12,
@@ -197,7 +197,7 @@ export default function App() {
                     fill="url(#probFill)"
                     isAnimationActive={false}
                   />
-                  <ReferenceLine y={0.5} stroke="var(--text-muted)" strokeDasharray="4 4" strokeOpacity={0.8} />
+                  <ReferenceLine y={0.5} stroke="var(--text-dim)" strokeDasharray="4 4" strokeOpacity={0.8} />
                   <ReferenceDot
                     x={23}
                     y={theoreticalProbability(23)}
