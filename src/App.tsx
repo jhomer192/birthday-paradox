@@ -19,6 +19,7 @@ import {
   type NamedSample,
   type Person,
 } from './math';
+import { track } from './lib/analytics';
 
 const TRIAL_OPTIONS = [100, 1_000, 10_000, 100_000] as const;
 type TrialCount = (typeof TRIAL_OPTIONS)[number];
@@ -94,6 +95,8 @@ export default function App() {
     setRunning(true);
     setCompletedTrials(0);
     setHits(0);
+    // The simulator is the reason to visit; the static curve renders anyway.
+    track('simulation-run', { groupSize, trials: trialCount });
 
     const totalTrials = trialCount;
     const n = groupSize;
