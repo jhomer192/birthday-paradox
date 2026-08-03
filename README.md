@@ -2,7 +2,7 @@
 
 An interactive, portfolio-grade visualisation of the classic Birthday Paradox. It plots the theoretical probability curve alongside a **live Monte Carlo simulator** that you can run right in the browser — with up to 100,000 trials — and watch the empirical estimate converge on the maths.
 
-**Live demo:** https://jhomer192.github.io/birthday-paradox/
+**Live demo:** https://jackhomer.com/birthday-paradox/
 
 ## Features
 

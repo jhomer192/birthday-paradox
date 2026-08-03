@@ -30,4 +30,4 @@ git worktree add -B gh-pages "$WORKTREE_DIR" --no-checkout
   git push -u --force origin gh-pages
 )
 
-echo "→ Done. Live at https://jhomer192.github.io/birthday-paradox/"
+echo "→ Done. Live at https://jackhomer.com/birthday-paradox/"

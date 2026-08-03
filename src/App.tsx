@@ -376,7 +376,16 @@ export default function App() {
         </section>
 
         <footer className="mt-12 text-center text-xs text-theme-muted">
-          Built by Jack Homer - assumes 365 uniform days (ignores Feb 29 and seasonal birth clustering).
+          Built by{' '}
+          <a href="https://jackhomer.com" className="underline">
+            Jack Homer
+          </a>
+          {' · '}
+          <a href="https://jackhomer.com/projects/birthday-paradox/" className="underline">
+            Project write-up
+          </a>
+          {' - '}
+          assumes 365 uniform days (ignores Feb 29 and seasonal birth clustering).
         </footer>
       </div>
     </div>
