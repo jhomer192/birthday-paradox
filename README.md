@@ -1,49 +1,34 @@
 # Birthday Paradox Simulator
 
-An interactive, portfolio-grade visualisation of the classic Birthday Paradox. It plots the theoretical probability curve alongside a **live Monte Carlo simulator** that you can run right in the browser — with up to 100,000 trials — and watch the empirical estimate converge on the maths.
+An interactive birthday paradox simulator. It draws the exact probability that two people in a group of N share a birthday, then runs up to 100,000 random groups in the browser so you can watch the measured rate settle onto that curve.
 
-**Live demo:** https://jackhomer.com/birthday-paradox/
+Live at **https://jackhomer.com/birthday-paradox/**
 
-## Features
+![The probability curve next to the Monte Carlo controls](https://jackhomer.com/screenshots/birthday-paradox.webp)
 
-- Theoretical P(N) curve for N = 1..100 with the famous 50% crossover at N = 23 annotated.
-- Monte Carlo simulator with chunked `requestAnimationFrame` scheduling so the UI stays responsive even at 100k trials.
-- Adjustable group size (1–100) and trial count (100 / 1k / 10k / 100k).
-- Animated progress bar, live running estimate, and a difference metric against the theoretical value.
-- Random-sample calendar view: all 365 days as cells, with collisions glowing red.
-- Dark / light theme with auto-detect plus manual override.
+## What it does
+
+The curve plots P(N) for N = 1 to 100, with the crossover at N = 23 marked where the probability first passes a coin flip, at 50.73%. Move the group-size slider and the theoretical value, the odds phrased as yes/no, and the gap against the simulation all update with it.
+
+The Monte Carlo panel draws groups of random birthdays and counts how many contain a collision. Pick 100, 1,000, 10,000, or 100,000 trials. Work is split into chunks scheduled with `requestAnimationFrame`, roughly a sixtieth of the run at a time, so the page keeps drawing while 100,000 trials go through. The running estimate and its distance from theory update as it goes.
+
+The sample viewer shows one group as named people with birthdays, colored by which of them collide. Samples are generated from a seeded PRNG, so the seed printed under the grid reproduces the same group. Sort by collision group, name, or date; filter to a single group; search for a person; or regenerate for a new draw.
+
+Two notes under the charts explain why the answer is surprising: 23 people make C(23,2) = 253 pairs, and P(N) is one minus the probability that all N birthdays are distinct. Both the curve and the simulation assume 365 equally likely days, ignoring February 29 and seasonal birth clustering.
+
+Four color themes ship with it, and the choice is stored in the browser.
+
+## Running it locally
+
+```sh
+npm install
+npm run dev
+```
+
+`npm run build` type-checks and bundles into `dist/`, `npm run preview` serves that build, and `npm run lint` type-checks without emitting. `bash scripts/deploy.sh` builds and pushes the output to the `gh-pages` branch through a temporary git worktree, which is what GitHub Pages serves.
 
 ## Stack
 
-- Vite + React 18 + TypeScript (strict mode)
-- Tailwind CSS
-- Recharts
+React 18 and TypeScript on Vite, with Tailwind CSS and Recharts. The probability math, the simulator, and the seeded sampler are in `src/math.ts`.
 
-## Local development
-
-```bash
-npm install
-npm run dev        # Vite dev server (http://localhost:5173/birthday-paradox/)
-npm run build      # Typecheck + production build into dist/
-npm run preview    # Serve the built bundle locally
-```
-
-## Deployment
-
-The site is published to GitHub Pages from the `gh-pages` branch (Pages source: **Deploy from a branch**, branch `gh-pages`, folder `/`).
-
-### One-command deploy
-
-```bash
-bash scripts/deploy.sh
-```
-
-This builds `dist/` and pushes it to the `gh-pages` branch via a temporary git worktree.
-
-### GitHub Actions (optional)
-
-An Actions workflow is provided at [`scripts/pages-workflow.yml`](scripts/pages-workflow.yml). To switch to Actions-based deploys, copy it to `.github/workflows/deploy.yml` and change the Pages source to **GitHub Actions** in repo settings. (It wasn't checked into `.github/workflows/` directly because the ambient `gh` token used to bootstrap the repo lacked the `workflow` OAuth scope.)
-
----
-
-Built by [Jack Homer](https://github.com/jhomer192).
+Write-up: https://jackhomer.com/projects/birthday-paradox/
