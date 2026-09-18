@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>%F0%9F%8E%82</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Interactive Birthday Paradox simulator: compare theoretical probability against live Monte Carlo trials." />
+    <meta name="description" content="Compare birthday match probabilities with Monte Carlo trials. Explore why 23 people give more than a 50% chance of a shared birthday." />
     <link rel="canonical" href="https://jackhomer.com/birthday-paradox/" />
     <meta name="author" content="Jack Homer" />
     <title>Birthday Paradox Simulator · Jack Homer</title>
     <meta property="og:title" content="Birthday Paradox Simulator · Jack Homer" />
-    <meta property="og:description" content="Interactive Birthday Paradox simulator: compare theoretical probability against live Monte Carlo trials." />
+    <meta property="og:description" content="Compare birthday match probabilities with Monte Carlo trials. Explore why 23 people give more than a 50% chance of a shared birthday." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jackhomer.com/birthday-paradox/" />
     <meta property="og:site_name" content="Jack Homer" />
     <meta name="twitter:card" content="summary" />
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Birthday Paradox Simulator", "url": "https://jackhomer.com/birthday-paradox/", "description": "Interactive Birthday Paradox simulator: compare theoretical probability against live Monte Carlo trials.", "applicationCategory": "UtilityApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "isAccessibleForFree": true, "author": {"@type": "Person", "@id": "https://jackhomer.com/#jack", "name": "Jack Homer", "url": "https://jackhomer.com"}, "isPartOf": {"@type": "WebSite", "@id": "https://jackhomer.com/#site", "name": "Jack Homer", "url": "https://jackhomer.com"}, "sameAs": "https://github.com/jhomer192/birthday-paradox"}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Birthday Paradox Simulator", "url": "https://jackhomer.com/birthday-paradox/", "description": "Compare birthday match probabilities with Monte Carlo trials. Explore why 23 people give more than a 50% chance of a shared birthday.", "applicationCategory": "UtilityApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "isAccessibleForFree": true, "author": {"@type": "Person", "@id": "https://jackhomer.com/#jack", "name": "Jack Homer", "url": "https://jackhomer.com"}, "isPartOf": {"@type": "WebSite", "@id": "https://jackhomer.com/#site", "name": "Jack Homer", "url": "https://jackhomer.com"}, "sameAs": "https://github.com/jhomer192/birthday-paradox"}</script>
     <script>
 (function(){var s=localStorage.getItem('site-theme');if(s)document.documentElement.setAttribute('data-theme',s)})();
 </script>
@@ -24,9 +24,18 @@
     <!-- Analytics: same property as jackhomer.com, so a visit here is attributable
          to the post or page that sent it. Cookieless; the website ID is public. -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="9a521c26-dce4-4cf0-b5d9-5266913dc11c"></script>
+    <link rel="stylesheet" href="/guide.css" />
   </head>
   <body>
     <div id="root"></div>
+    <section class="app-guide" aria-labelledby="app-guide-title">
+      <h2 id="app-guide-title">About Birthday Paradox Simulator</h2>
+      <p>Explore the chance that at least two people in a group share a birthday. The birthday paradox reaches a probability of about 50.7% with just 23 people.</p>
+      <p>Choose a group size, then run Monte Carlo trials to compare the measured match rate with the theoretical curve. Inspect a sample group to see which birthdays match.</p>
+      <p>The model assumes 365 equally likely birthdays and independent draws. It does not include leap days or seasonal differences in birth rates.</p>
+      <p>Built by <a href="https://jackhomer.com/">Jack Homer</a>. Read the <a href="https://jackhomer.com/projects/birthday-paradox/">Birthday Paradox Simulator project write-up</a>.</p>
+      <noscript><p>Enable JavaScript to use the interactive app.</p></noscript>
+    </section>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
