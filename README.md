@@ -32,3 +32,5 @@ npm run dev
 React 18 and TypeScript on Vite, with Tailwind CSS and Recharts. The probability math, the simulator, and the seeded sampler are in `src/math.ts`.
 
 Write-up: https://jackhomer.com/projects/birthday-paradox/
+
+A project by [Jack Homer](https://jackhomer.com/).
